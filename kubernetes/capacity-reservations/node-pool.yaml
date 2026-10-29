@@ -1,0 +1,23 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: example-np-reserved
+spec:
+  replicas: 1
+  limits:
+    nodes: 2 # replicas + 1 to resolve a drift issue
+  template:
+    spec:
+      expireAfter: Never
+      nodeClassRef:
+        group: karpenter.azure.com
+        kind: AKSNodeClass
+        name: example-crg
+      requirements:
+        - key: karpenter.azure.com/sku-name
+          operator: In
+          values: ["Standard_D4ads_v6"]
+      startupTaints:
+        - key: node.cilium.io/agent-not-ready
+          effect: NoExecute
+          value: "true"

@@ -1,0 +1,24 @@
+apiVersion: karpenter.azure.com/v1beta1
+kind: AKSNodeClass
+metadata:
+  name: example-crg
+spec:
+  capacityReservation:
+    groupID: /subscriptions/5e2c7e80-65bf-4b78-a13d-5f6032bdd018/resourceGroups/rg-aks-nap-demo-capacity/providers/Microsoft.Compute/capacityReservationGroups/aks-nap-demo-crg
+  
+  # Node OS image family
+  # Options: AzureLinux | Ubuntu2204 | Ubuntu2404
+  imageFamily: AzureLinux
+
+  # Virtual network subnet configuration (optional)
+  # If not specified, uses the default --vnet-subnet-id from Karpenter installation
+  vnetSubnetID: "/subscriptions/5e2c7e80-65bf-4b78-a13d-5f6032bdd018/resourceGroups/rg-aks-nap-demo/providers/Microsoft.Network/virtualNetworks/vnet-aks-nap/subnets/snet-aks-workload"
+
+  # OS disk size in GB (optional)
+  osDiskSizeGB: 128
+
+  # Optional: Azure resource tags for NAP-provisioned nodes
+  tags:
+    provisioner: karpenter
+    environment: demo
+    type: reserved-compute
